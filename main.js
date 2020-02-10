@@ -2,17 +2,35 @@ const canvas = document.getElementById('board');
 const context = canvas.getContext('2d');
 
 
-let board = new Board();
+let piece = new Piece(context);
+
+
+
+//controller of moviments 
+moves = {
+    [key.left]: statePiece => ({...statePiece, x: statePiece.x - 1}),
+    [key.right]: statePiece => ({...statePiece, x: statePiece.x + 1}),
+    [key.down]: statePiece => ({...statePiece, y: statePiece.y + 1}),
+    [key.space]: statePiece => ({...statePiece, y: statePiece.y + 1}),
+    [key.up]: statePiece => board.rotate(statePiece) 
+};
+
+
+let board = new Board(context);
+addEventListener();
+
+// Start the game
 function play(){
     // board = getEmptyBoard();
-    // let piece = new Piece(context);
-    // piece.draw();
-    // board.piece = piece;
+    piece.draw();
+    board.piece = piece;
+    
     resetGame();
     board.reset();
-    console.log(board.grid);
+    // console.log(board.grid);
 }
 
+// reset the game
 function resetGame() {
     score = 0;
     level = 0;
@@ -20,22 +38,24 @@ function resetGame() {
     board.reset()
 }
 
-moves = {
-    [key.left]: statePiece => ({...statePiece, x: statePiece.x - 1}),
-    [key.right]: statePiece => ({...statePiece, x: statePiece.x + 1}),
-    [key.down]: statePiece => ({...statePiece, y: statePiece.y + 1}),
-    [key.space]: statePiece => ({...statePiece, y: statePiece.y + 1}),
-};
+function pause () {
+    
+}
 
 function addEventListener() {
     document.addEventListener("keydown", event => {
-        if (moves[event.keyCode]) {
+        
+        if(event.keyCode === key.P){
+            pause()
+        } if (event.keyCode === key.R ) {
+            resetGame()
+        }else if (moves[event.keyCode]) {
             event.preventDefault();
     
     
             // new state of piece;
             let statePiece = moves[event.keyCode](board.piece);
-    
+           
             if (board.valid(statePiece)) {
                 // verify if the move is valid
                 board.piece.move(statePiece);
@@ -45,10 +65,8 @@ function addEventListener() {
                 board.piece.draw();
             }
         }
-    
     });
 }
-
 
 
 // move(){

@@ -27,18 +27,19 @@ class Piece{
 
     draw(){
         this.context.fillStyle = this.color;
-        this.shape.forEach(row ,y => {
-            
-            if (value > 0) {
-                this.context.fillRect(this.x + x, this.y + y, 1, 1);    
-            }
-            
+        this.shape.forEach((row, y) => {
+            row.forEach((value, x) => {
+                if (value > 0) {
+                    this.context.fillRect(this.x + x, this.y + y, 1, 1);    
+                }
+            });
         });
     }
 
-    move(statePiece) {
+    moves(statePiece) {
         this.x = statePiece.x;
         this.y = statePiece.y;
         this.shape = statePiece.shape;
       }
 }
+
