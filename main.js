@@ -6,13 +6,13 @@ let piece = new Piece(context);
 
 
 
-//controller of moviments 
-moves = {
-    [key.left]: statePiece => ({...statePiece, x: statePiece.x - 1}),
-    [key.right]: statePiece => ({...statePiece, x: statePiece.x + 1}),
-    [key.down]: statePiece => ({...statePiece, y: statePiece.y + 1}),
-    [key.space]: statePiece => ({...statePiece, y: statePiece.y + 1}),
-    [key.up]: statePiece => board.rotate(statePiece) 
+//controller of movements 
+keyPressed = {
+    [KEY.left]: statePiece => ({...statePiece, x: statePiece.x - 1}),
+    [KEY.right]: statePiece => ({...statePiece, x: statePiece.x + 1}),
+    [KEY.down]: statePiece => ({...statePiece, y: statePiece.y + 1}),
+    [KEY.space]: statePiece => ({...statePiece, y: statePiece.y + 1}),
+    [KEY.up]: statePiece => board.rotate(statePiece) 
 };
 
 
@@ -25,7 +25,7 @@ function play(){
     piece.draw();
     board.piece = piece;
     
-    resetGame();
+    // resetGame();
     board.reset();
     // console.log(board.grid);
 }
@@ -36,43 +36,51 @@ function resetGame() {
     level = 0;
     lines = 0;
     board.reset()
+    console.log('the game was reseted')
 }
 
 function pause () {
-    
+    let pauseGame = false
+    if (!pauseGame){
+        pauseGame = true
+        return alert('The game was paused!')
+    } else if (pauseGame){
+        pauseGame = false
+        console.log('The game come back', pause)
+    }
 }
 
 function addEventListener() {
     document.addEventListener("keydown", event => {
         
-        if(event.keyCode === key.P){
-            pause()
-        } if (event.keyCode === key.R ) {
-            resetGame()
-        }else if (moves[event.keyCode]) {
+        if(event.keyCode === KEY.P){
+            pause();
+        } if (event.keyCode === KEY.R ) {
+            resetGame();
+        } else if (keyPressed[event.keyCode]) {
             event.preventDefault();
     
     
-            // new state of piece;
-            let statePiece = moves[event.keyCode](board.piece);
-           
+            // new state of piece;  example const p = this.moves[event.key](this.piece);
+            let statePiece = keyPressed[event.keyCode](board.piece);
+
             if (board.valid(statePiece)) {
                 // verify if the move is valid
                 board.piece.move(statePiece);
-    
                 context.clearRect (0, 0, context.canvas.width, context.canvas.height);
-    
                 board.piece.draw();
+                // Hard drop
+            } if(event.keyCode === KEY.space){
+                while (board.valid(statePiece)){
+                    board.piece.move(statePiece);
+                    statePiece = keyPressed[KEY.down](board.piece);
+                }   
             }
         }
     });
 }
 
 
-// move(){
-//     this.x = p.x;
-//     this.y = p.y;
-// }
 // calculate size of canvas
 context.canvas.width = cols * blockSize;
 context.canvas.height =  rows * blockSize;

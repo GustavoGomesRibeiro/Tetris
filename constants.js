@@ -1,7 +1,7 @@
 const cols = 10;
 const rows =  20;
 const blockSize = 30;
-const key = {
+const KEY = {
     left: 37,
     right: 39,
     down: 40,
@@ -10,4 +10,4 @@ const key = {
     P: 80,
     R: 82
 }
-Object.freeze(key); //this method freezes an object.
+Object.freeze(KEY); //this method freezes an object.

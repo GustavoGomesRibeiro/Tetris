@@ -8,6 +8,7 @@ class Piece{
     color;
     shape;
     context;
+    typeId;
     
     constructor(){
         this.context = context;
@@ -15,7 +16,7 @@ class Piece{
     }
 
     spwan(){
-        this.color = 'yellow'
+        this.color = 'blue'
         this.shape = [
             [2,0,0],
             [2,2,2],
@@ -36,7 +37,7 @@ class Piece{
         });
     }
 
-    moves(statePiece) {
+    move(statePiece) {
         this.x = statePiece.x;
         this.y = statePiece.y;
         this.shape = statePiece.shape;
