@@ -29,7 +29,7 @@ notOccupied(x,y) {
                 let y = statePiece.y + dy;
 
                 return(
-                    value === 0  || (this.floor(x) && this.wall(y) && this.notOccupied(x, y))
+                    value === 0  || (this.wall(x) && this.floor(y) && this.notOccupied(x, y))
                 );
             });
         });
@@ -42,12 +42,21 @@ notOccupied(x,y) {
                 [rotatePiece.shape[x][y], rotatePiece.shape[y][x]] = [rotatePiece.shape[y][x], rotatePiece.shape[x][y]]  
             }            
         }
-        console.log('retornou algo', piece)
+        rotatePiece.shape.forEach(row => row.reverse());
+        return rotatePiece;
     }
 
-    // statePiece.shape.forEach(row => {
-    //     row.reverse();
-    // });
+
+    freeze(){
+        this.piece.shape.forEach((row, y)=>{
+            row.forEach((value, x) => {
+                if( value > 0) {
+                    this.grid[y + this.piece.y][x + this.piece.x] = value
+                }
+            });
+        });
+    }
+
         
     // using the method fill, this method changes all the elemtes fot an value static, from start to 0. arr.fill(value[, start[, end]])
     getEmptyBoard() {

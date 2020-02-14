@@ -1,6 +1,10 @@
 const canvas = document.getElementById('board');
 const context = canvas.getContext('2d');
-
+const time = {
+    start: 0,
+    timeLapseInterval: 0,
+    level: 1000
+};
 
 let piece = new Piece(context);
 
@@ -21,13 +25,14 @@ addEventListener();
 
 // Start the game
 function play(){
-    // board = getEmptyBoard();
-    piece.draw();
+    piece.spwan();
+    animationPieces();
     board.piece = piece;
-    
-    // resetGame();
     board.reset();
-    // console.log(board.grid);
+    // resetGame();
+    // piece.draw();
+    // board = getEmptyBoard();
+
 }
 
 // reset the game
@@ -40,12 +45,12 @@ function resetGame() {
 }
 
 function pause () {
-    let pauseGame = false
-    if (!pauseGame){
-        pauseGame = true
+    let pauseGame = true
+    if (pauseGame){
+        pauseGame = false
         return alert('The game was paused!')
     } else if (pauseGame){
-        pauseGame = false
+        pauseGame = true
         console.log('The game come back', pause)
     }
 }
@@ -80,6 +85,49 @@ function addEventListener() {
     });
 }
 
+//function for creating animation for pieces
+function animationPieces(now = 0) {
+    time.timeLapseInterval = now - time.start;
+    if(time.timeLapseInterval > time.level){
+
+        time.start = now;
+
+        this.drop();  
+    }
+
+    context.clearRect(0, 0, context.canvas.width, context.canvas.height);
+
+    piece.draw();
+    window.requestAnimationFrame(animationPieces);
+}
+
+function draw(){
+    board.draw();
+    this.drawBoard();
+}
+
+function drawBoard(){
+    this.grid.forEach((row, y) => {
+        row.forEach((value, x) => {
+          if (value > 0) {
+            this.ctx.fillStyle = COLORS[value];
+            this.ctx.fillRect(x, y, 1, 1);
+          }
+        });
+      });
+}
+
+// function for validation freeze pieces
+function drop() {
+    let drop = keyPressed[KEY.down](board.piece);
+
+    if (board.valid(drop)) {
+            board.piece.move(drop)
+    } else {
+        board.freeze();
+        console.log('drop')
+    }
+}
 
 // calculate size of canvas
 context.canvas.width = cols * blockSize;

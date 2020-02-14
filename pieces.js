@@ -16,12 +16,10 @@ class Piece{
     }
 
     spwan(){
-        this.color = 'blue'
-        this.shape = [
-            [2,0,0],
-            [2,2,2],
-            [0,0,0]
-        ];
+
+        const typeId = this.randomizePieces(color.length);
+        this.shape = shapes [typeId ];
+        this.color = color [typeId];
         this.x = 3;
         this.y = 0;
     }
@@ -42,5 +40,10 @@ class Piece{
         this.y = statePiece.y;
         this.shape = statePiece.shape;
       }
+
+      randomizePieces(noOfTypes){
+          return Math.floor(Math.random() * noOfTypes);
+      }
+
 }
 
