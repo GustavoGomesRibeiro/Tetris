@@ -16,13 +16,14 @@ class Piece{
     }
 
     spwan(){
-
         const typeId = this.randomizePieces(color.length);
         this.shape = shapes [typeId ];
         this.color = color [typeId];
         this.x = 3;
         this.y = 0;
     }
+        
+
 
     draw(){
         this.context.fillStyle = this.color;

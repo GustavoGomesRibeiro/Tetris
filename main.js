@@ -1,5 +1,8 @@
 const canvas = document.getElementById('board');
 const context = canvas.getContext('2d');
+const canvasNext = document.getElementById('next');
+const contextNext = canvasNext.getContext('2d');
+
 const time = {
     start: 0,
     timeLapseInterval: 0,
@@ -20,7 +23,7 @@ keyPressed = {
 };
 
 
-let board = new Board(context);
+let board = new Board(context, contextNext);
 addEventListener();
 
 // Start the game
@@ -92,42 +95,19 @@ function animationPieces(now = 0) {
 
         time.start = now;
 
-        this.drop();  
+        board.drop();  
     }
 
     context.clearRect(0, 0, context.canvas.width, context.canvas.height);
 
-    piece.draw();
+    board.draw();
     window.requestAnimationFrame(animationPieces);
 }
 
-function draw(){
-    board.draw();
-    this.drawBoard();
-}
 
-function drawBoard(){
-    this.grid.forEach((row, y) => {
-        row.forEach((value, x) => {
-          if (value > 0) {
-            this.ctx.fillStyle = COLORS[value];
-            this.ctx.fillRect(x, y, 1, 1);
-          }
-        });
-      });
-}
 
-// function for validation freeze pieces
-function drop() {
-    let drop = keyPressed[KEY.down](board.piece);
 
-    if (board.valid(drop)) {
-            board.piece.move(drop)
-    } else {
-        board.freeze();
-        console.log('drop')
-    }
-}
+    
 
 // calculate size of canvas
 context.canvas.width = cols * blockSize;

@@ -10,6 +10,8 @@ const KEY = {
     P: 80,
     R: 82
 }
+Object.freeze(KEY); //this method freezes an object.
+
 const color = [
     'blue',
     'yellow',
@@ -58,4 +60,4 @@ const shapes = [
         [0,0,0]
     ],
 ]
-Object.freeze(KEY); //this method freezes an object.
+Object.freeze(shapes);
