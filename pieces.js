@@ -2,7 +2,6 @@
 // The pieces has been the names [I,J,L,O,S,T and Z]
 
 class Piece{
-
     x;
     y;
     color;
@@ -10,13 +9,13 @@ class Piece{
     context;
     typeId;
     
-    constructor(){
+    constructor(context){
         this.context = context;
         this.spwan();
     }
 
     spwan(){
-        const typeId = this.randomizePieces(color.length);
+        const typeId = this.randomizePieces(color.length - 1);
         this.shape = shapes [typeId ];
         this.color = color [typeId];
         this.x = 3;
@@ -43,7 +42,7 @@ class Piece{
       }
 
       randomizePieces(noOfTypes){
-          return Math.floor(Math.random() * noOfTypes);
+          return Math.floor(Math.random() * noOfTypes + 1);
       }
 
 }

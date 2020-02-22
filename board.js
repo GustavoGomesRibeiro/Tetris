@@ -1,14 +1,35 @@
 class Board {
-    grid;
-    piece;
     contextNext;
     context;
+    grid;
+    piece;
     next;
+    requestId;
+    time;
 
     constructor(context, contextNext){
         this.context = context;
         this.contextNext = contextNext;
+        this.init()
+        // this.piece = new Piece();
+        // this.grid = this.getEmptyBoard();
     }
+
+    init() {
+        // calculate size of canvas
+        context.canvas.width = cols * blockSize;
+        context.canvas.height =  rows * blockSize;
+        // scale blocks, using the scale we can give the size of the block as one
+        context.scale(blockSize, blockSize)   
+      }
+
+        //  this worked from reset the game when you press the button 'play'
+    reset(){
+            this.grid = this.getEmptyGrid();
+            this.piece = new Piece(this.context);
+            this.getNewPiece();
+        }
+    
 
     getNewPiece(){
         this.next = new Piece (this.contextNext)
@@ -22,30 +43,9 @@ class Board {
         // console.log('getNewPiece', getNewPiece)
     }
     
-    //  this worked from reset the game when you press the button 'play'
-    reset(){
-        this.grid = this.getEmptyBoard();
-    }
-
-
-
-
      draw(){
-        this.piece = new Piece();
         this.piece.draw();
         this.drawBoard();
-    }
-
-
-    drawBoard(){
-         this.grid.forEach((row, y) => {
-            row.forEach((value, x) => {
-              if (value > 0) {
-                this.context.fillStyle = color[value];
-                this.context.fillRect(x, y, 1, 1);
-              }
-            });
-          });
     }
 
     // function for validation freeze pieces
@@ -56,30 +56,18 @@ class Board {
             this.piece.move(drop)
         } else{
             this.freeze();
+            this.clearLines();
           if (this.piece.y === 0) {
               return false;
           }  
           this.piece = this.next;
           this.piece.context = this.context;
           this.getNewPiece();
+        //   console.log('new piece', getNewPiece)
           // this.piece.setStartingPosition();
         }
         return true;
     }
-    
-    wall(x){
-        return x >= 0 && x < cols;
-    }
-
-    floor(y){
-        return y <= rows;
-    }
-    
-    
-    notOccupied(x,y) {
-        return this.grid[y] && this.grid[y][x] === 0;
-    }
-
 
     valid(statePiece){
         return statePiece.shape.every((row, dy) => {
@@ -96,7 +84,7 @@ class Board {
     }
 
     freeze(){
-        this.piece.shape.forEach((row, y)=>{
+        this.piece.shape.forEach((row, y) => {
             row.forEach((value, x) => {
                 if( value > 0) {
                     this.grid[y + this.piece.y][x + this.piece.x] = value
@@ -104,6 +92,19 @@ class Board {
             });
         });
     }
+
+    
+    drawBoard(){
+        this.grid.forEach((row, y) => {
+           row.forEach((value, x) => {
+             if (value > 0) {
+               this.context.fillStyle = color[value];
+               this.context.fillRect(x, y, 1, 1);
+             }
+           });
+         });
+   }
+
 
     rotate(piece){
         let rotatePiece = JSON.parse(JSON.stringify(piece));
@@ -116,6 +117,55 @@ class Board {
         return rotatePiece;
     }
 
+    clearLines(){
+        let lines = 0;
+        this.grid.forEach((row, y ) => {
+            if (row.every (value => value > 0)){
+                lines++;
+                // this method remove one row
+                this.grid.splice(y,1)
+                //this method add new item at the top.
+                this.grid.unshift(Array(cols).fill(0));
+            }
+        });
+        if (lines > 0) {
+            account.score += this.getLineClearPoints(lines);
+            account.lines += lines;
+
+        if (account.lines >= linesPerLevel) {
+            account.level++;
+
+            account.lines -= linesPerLevel;
+
+            time.level = level [account.level];
+        }    
+        }
+    }
+
+    getLineClearPoints(lines){
+        return lines === 1 ? points.single : 
+               lines === 2 ? points.double :
+               lines === 3 ? points.triple :
+               lines === 4 ? points.tetris : 0;
+            //    return (account.level + 1) * lineClearPoints;
+    }
+
+    getEmptyGrid() {
+        return Array.from({ length: rows }, () => Array(cols).fill(0));
+      }
+    
+    wall(x){
+        return x >= 0 && x < cols;
+    }
+
+    floor(y){
+        return y <= rows;
+    }
+    
+    
+    notOccupied(x,y) {
+        return this.grid[y] && this.grid[y][x] === 0;
+    }
         
     // using the method fill, this method changes all the elemtes fot an value static, from start to 0. arr.fill(value[, start[, end]])
     getEmptyBoard() {
