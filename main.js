@@ -115,14 +115,14 @@ function addEventListener() {
                 // Hard drop
             } if(event.keyCode === KEY.space){
                 while (board.valid(statePiece)){
-                    account.score += points.hard_drop;
+                    account.score += POINTS.HARD_DROP;
                     board.piece.move(statePiece);
                     statePiece = keyPressed[KEY.down](board.piece);
                 }   
             } else if (board.valid(statePiece)){
                 board.piece.move(statePiece);
                 if (event.keyCode === KEY.down) {
-                    account.score += points.soft_drop;
+                    account.score += POINTS.SOFT_DROP;
                 }
             }
         }

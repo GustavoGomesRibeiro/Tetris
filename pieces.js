@@ -8,6 +8,7 @@ class Piece{
     shape;
     context;
     typeId;
+    hardDropped;
     
     constructor(context){
         this.context = context;
@@ -15,11 +16,12 @@ class Piece{
     }
 
     spwan(){
-        const typeId = this.randomizePieces(color.length - 1);
+        const typeId = this.randomizePieces(COLOR.length - 1);
         this.shape = shapes [typeId ];
-        this.color = color [typeId];
-        this.x = 3;
+        this.color = COLOR [typeId];
+        this.x = 0;
         this.y = 0;
+        this.hardDropped = false;
     }
         
 
@@ -36,13 +38,23 @@ class Piece{
     }
 
     move(statePiece) {
-        this.x = statePiece.x;
-        this.y = statePiece.y;
+        if(!this.hardDropped){
+            this.x = statePiece.x;
+            this.y = statePiece.y;
+        }
         this.shape = statePiece.shape;
       }
 
       randomizePieces(noOfTypes){
           return Math.floor(Math.random() * noOfTypes + 1);
+      }
+
+      setStartingPosition() {
+        this.x = this.typeId === 4 ? 4 : 3;
+      }
+      
+      hardDrop(){
+        this.hardDropped = true;
       }
 
 }

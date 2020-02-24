@@ -13,15 +13,15 @@ const KEY = {
 }
 Object.freeze(KEY); //this method freezes an object.
 
-const points = {
-    single: 100,
-    double: 300,
-    triple: 500,
-    tetris: 800,
-    soft_drop: 1,
-    hard_drop: 2
+const POINTS = {
+    SINGLE: 100,
+    DOUBLE: 300,
+    TRIPLE: 500,
+    TETRIS: 800,
+    SOFT_DROP: 1,
+    HARD_DROP: 2
 }
-Object.freeze(points);
+Object.freeze(POINTS);
 
 const level = {
     0: 800,
@@ -49,7 +49,7 @@ const level = {
 }
 Object.freeze(level);
 
-const color = [
+const COLOR = [
     'blue',
     'yellow',
     'red',
@@ -58,6 +58,8 @@ const color = [
     'orange',
     'rose'
 ];
+Object.freeze(COLOR);
+
 // The pieces has been the names [I,J,L,O,S,T and Z]
 const shapes = [
     [

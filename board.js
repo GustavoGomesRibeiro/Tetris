@@ -11,8 +11,6 @@ class Board {
         this.context = context;
         this.contextNext = contextNext;
         this.init()
-        // this.piece = new Piece();
-        // this.grid = this.getEmptyBoard();
     }
 
     init() {
@@ -27,6 +25,7 @@ class Board {
     reset(){
             this.grid = this.getEmptyGrid();
             this.piece = new Piece(this.context);
+            this.piece.setStartingPosition();
             this.getNewPiece();
         }
     
@@ -62,9 +61,8 @@ class Board {
           }  
           this.piece = this.next;
           this.piece.context = this.context;
+          this.piece.setStartingPosition();
           this.getNewPiece();
-        //   console.log('new piece', getNewPiece)
-          // this.piece.setStartingPosition();
         }
         return true;
     }
@@ -98,7 +96,7 @@ class Board {
         this.grid.forEach((row, y) => {
            row.forEach((value, x) => {
              if (value > 0) {
-               this.context.fillStyle = color[value];
+               this.context.fillStyle = COLOR[value];
                this.context.fillRect(x, y, 1, 1);
              }
            });
@@ -123,7 +121,7 @@ class Board {
             if (row.every (value => value > 0)){
                 lines++;
                 // this method remove one row
-                this.grid.splice(y,1)
+                this.grid.splice(y,1);
                 //this method add new item at the top.
                 this.grid.unshift(Array(cols).fill(0));
             }
@@ -143,11 +141,13 @@ class Board {
     }
 
     getLineClearPoints(lines){
-        return lines === 1 ? points.single : 
-               lines === 2 ? points.double :
-               lines === 3 ? points.triple :
-               lines === 4 ? points.tetris : 0;
-            //    return (account.level + 1) * lineClearPoints;
+        const lineClearPoints =
+               lines === 1 ? POINTS.SINGLE : 
+               lines === 2 ? POINTS.DOUBLE :
+               lines === 3 ? POINTS.TRIPLE :
+               lines === 4 ? POINTS.TETRIS : 0;
+
+               return (account.level + 1) * lineClearPoints;
     }
 
     getEmptyGrid() {
